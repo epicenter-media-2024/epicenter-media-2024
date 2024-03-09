@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import FacebookLogin from 'react-facebook-login'
 
-function App() {
+const FacebookLoginButton = () => {
+  const [userData, setUserData] = useState({})
+
+  const responseFacebook = (response) => {
+    setUserData({
+      name: response.name,
+      email: response.email,
+      picture: response.picture.data.url,
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello Ash!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {userData.name ? (
+        <div>
+          <img src={userData.picture} alt={userData.name} />
+          <p>Welcome, {userData.name}</p>
+          <p>Email: {userData.email}</p>
+        </div>
+      ) : (
+        <FacebookLogin
+          appId="776347620657961"
+          autoLoad={false}
+          fields="name, email, picture"
+          callback={responseFacebook}
+        />
+      )}
     </div>
-  );
+  )
 }
 
-export default App;
+export default FacebookLoginButton
